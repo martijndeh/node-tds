@@ -63,6 +63,11 @@ class exports.RowToken extends Token
           else val.length = column.length
       if val.length is 0 and column.type.emptyPossible
         val.buffer = new Buffer 0
+      else if val.length is 0xffff and column.isNullable
+        if column.type.emptyPossible
+          val.length = -1
+        else
+          val.length = 0
       else if val.length > 0
         val.buffer = stream.readBuffer val.length
       @values[index] = val
